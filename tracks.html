@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Треки</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="starter-template.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	<script src="dist/jquery.js"></script>
+
+	<script>
+      console.log(db);
+		function get_tracks(){
+			let find=$('#poisk').val();
+			text="";
+			$("div#tracks").empty();
+			if (find!="") {
+			$.getJSON(
+                    'http://bogdandm.ddns.net/audio-player-si/api/v1/' +db +'/track?q='+'"'+find+'"&p=0',
+                    {}
+                ).done((xhr) => {
+                    /*$.each(xhr.items, function(){
+						$.each(this,function(nam, value){
+						if (nam=="name") {text+=value+" "; console.log(text);}
+						if (nam=="length") text+=value+"sec "+"<br>";
+						$.each(xhr.items.artist, function(n, v){
+							if (n=="name") text+=v+" ";
+						})
+						$.each(xhr.items.album, function(n, v){
+							if (n=="name") text+=v;
+						})
+
+						//text=artist.name+" "+name+" "+length+" "+album.name;
+					});
+					});*/
+					for (var i in xhr.items){
+                        text+=xhr.items[i].name + " "+ xhr.items[i].length + "sec " + xhr.items[i].artist.name + " "+ xhr.items[i].album.name+ "<br>";
+//                        if
+					}
+					$("div#tracks").append("<p>"+text)
+//                        +"</p><br>"+'<ul class="pagination">  <li ><a href="#">&laquo;</a></li>  <li class="active"><a href="#">1</a></li>  <li><a href="#">2</a></li>  <li><a href="#">3</a></li>  <li><a href="#">4</a></li>  <li><a href="#">5</a></li>  <li><a href="#">&raquo;</a></li></ul>');
+					});
+		}
+			else {
+				alert("Введите имя трека");
+			}
+		}
+	</script>
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Плеер</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><input type="radio" id="db_type" value="sql" name="radio" checked>sql</li>
+            <li><input type="radio" id="db_type " value="nosql" name="radio">nosql</li>
+            <li><a href="index.html">Вход</a></li>
+			<li><a href="user.html">Пользователь</a></li>
+            <li class="active"><a href="tracks.html">Треки</a></li>
+            <li><a href="albums.html">Альбомы</a></li>
+			<li><a href="artists.html">Исполнители</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+
+    <!-- Button trigger modal -->
+	<br>
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal1">
+  Найти трек
+</button> <br><br>
+
+</div>
+
+<!-- Modal  поиск треков-->
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel1">Поиск треков</h4>
+      </div>
+      <div class="modal-body">
+			<div class="input-group">
+                        <label for="poisk" class="input-group-addon"
+                               id="poisk_label">Запрос</label>
+                        <input type="text" class="form-control" id="poisk"
+                               aria-describedby="poisk_label">
+						
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+        <button type="button" id="chng_btn" onclick="get_tracks();" class="btn btn-primary" data-toggle="popover" data-content="Неправильный запрос">Поиск</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- Modal  поиск альбомов-->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel2">Поиск альбомов</h4>
+      </div>
+      <div class="modal-body">
+			<div class="input-group">
+                        <label for="poisk" class="input-group-addon"
+                               id="poisk_label">Запрос</label>
+                        <input type="text" class="form-control" id="poisk"
+                               aria-describedby="poisk_label">
+						
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+        <button type="button" id="chng_btn" onclick="get_albums();" class="btn btn-primary" data-toggle="popover" data-content="Неправильный запрос">Поиск</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal  поиск исполнителей-->
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel3">Поиск исполнителей</h4>
+      </div>
+      <div class="modal-body">
+			<div class="input-group">
+                        <label for="poisk" class="input-group-addon"
+                               id="poisk_label">Запрос</label>
+                        <input type="text" class="form-control" id="poisk"
+                               aria-describedby="poisk_label">
+						
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+        <button type="button" id="chng_btn" onclick="get_artists();" class="btn btn-primary" data-toggle="popover" data-content="Неправильный запрос">Поиск</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="tracks">
+
+
+</div>
+
+
+
+    </div><!-- /.container -->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
